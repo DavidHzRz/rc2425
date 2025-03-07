@@ -32,11 +32,11 @@ triangle(A, B, C)
 
 triangle(A, B, C):- A > 0, B > 0, C > 0, A + B >= C, B + C >= A, A + C >= B.
 
-triangle(A, B, C, "equilateral"):- A > 0, B > 0, C > 0, A == B, A == C, B == C.
+triangle(A, B, C, "equilateral"):- triangle(A, B, C), A == B, A == C, B == C.
 
-triangle(A, B, C, "isosceles"):- A > 0, B > 0, C > 0, A + B >= C, B + C >= A, A + C >= B, A == B.
-triangle(A, B, C, "isosceles"):- A > 0, B > 0, C > 0, A + B >= C, B + C >= A, A + C >= B, B == C.
-triangle(A, B, C, "isosceles"):- A > 0, B > 0, C > 0, A + B >= C, B + C >= A, A + C >= B, A == C.
+triangle(A, B, C, "isosceles"):- triangle(A, B, C), A == B.
+triangle(A, B, C, "isosceles"):- triangle(A, B, C), B == C.
+triangle(A, B, C, "isosceles"):- triangle(A, B, C), A == C.
 
-triangle(A, B, C, "scalene"):- A > 0, B > 0, C > 0, A + B >= C, B + C >= A, A + C >= B, A \= B, A \= C, B \= C.
+triangle(A, B, C, "scalene"):- triangle(A, B, C), A \= B, A \= C, B \= C.
 
