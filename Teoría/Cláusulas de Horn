@@ -1,0 +1,22 @@
+
+Cláusulas de Horn (Pág. 55)
+
+Son aquellas que tienen un solo consecuente y los precedentes 
+deben estar unidos por una condición AND
+
+Notación: ^ = AND
+		  \/ = OR
+
+	1. a ^ b -> c
+	
+	2. a \/ b -> c No es C.Horn
+	
+	    Derivar en:	a -> c
+					b -> c
+	
+	3. a -> b ^ c No es C.Horn
+		
+		Derivar en:	a -> b
+					a -> c
+					
+	4. a -> b \/ c No es C.Horn
