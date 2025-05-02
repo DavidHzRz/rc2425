@@ -10,4 +10,4 @@ diferencias([Cab1|Resto1], [Cab2|Resto2], Dist):-
     Dist is R1 + R2.
 
 diferentes(A, B, 1):- A \= B.
-diferentes(_, _, 0).
+diferentes(A, A, 0).
