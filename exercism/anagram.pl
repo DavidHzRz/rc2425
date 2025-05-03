@@ -1,19 +1,15 @@
 anagram(Word, Candidates, Anagrams):-
-    string_codes(Word, L1),
-    aux(L1, Candidates, Anagrams).
+    string_lower(Word, LowerWord),
+    string_codes(LowerWord, L1),
+    msort(L1, Ls1),
+    aux(Ls1, LowerWord, Candidates, Anagrams).
 
-aux(_, [], []).
-aux(L1, [Cab|Resto], [Cab, R]):-
-    string_codes(Cab, L2),
-    esAnagrama(L1, L2),
-    aux(L1, Resto, R).
-
-esAnagrama(L1, L2):-
-    sort(L1, Ls1),
-    sort(L2, Ls2),
-    listasIguales(Ls1, Ls2).
-
-listasIguales([], []).
-listasIguales([Cab1|Resto1], [Cab2|Resto2]):-    
-    Cab1 = Cab2,
-    listasIguales(Resto1, Resto2).
+aux(_, _, [], []).
+aux(Ls1, Word, [Cab|Resto], [Cab|R]):- 
+    string_lower(Cab, LowerCab),
+    string_codes(LowerCab, L2),
+    msort(L2, Ls2),
+    Ls1 = Ls2,
+    aux(Ls1, Word, Resto, R).
+aux(Ls1, Word, [_|Resto], R):- 
+    aux(Ls1, Word, Resto, R).
