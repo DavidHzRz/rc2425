@@ -47,4 +47,4 @@ anchura(ArbolBinario, ListaRecorrido)
 	es cierto si ListaRecorrido unifica con las etiquetas de
 	ArbolBinario recorridas en anchura de izquierda a derecha.
 */
-anchura(nil, []).
+% Convertir a arbol generico y usar anchura.
