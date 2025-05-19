@@ -14,12 +14,13 @@ bin2gen(ArbolBinario, ArbolGenerico)
 	genérico equivalente a ArbolBinario
 */
 
-bin2gen(a(E, nil, nil), b(E, [])).
-bin2gen(a(E, nil, AD), b(E, LHD)):-
-	bin2gen(AD, LHD).
-bin2gen(a(E, AI, nil), b(E, LHI)):-
-	bin2gen(AI, LHI).
-bin2gen(a(E, AI, AD), b(E, [LHI, LHD])):-
-	bin2gen(AI, LHI),
-	bin2gen(AD, LHD).
-	
+bin2gen(a(Et, nil, nil), a(Et, [])).
+bin2gen(a(Et, nil, HD), a(Et, [RD])):- HD \= nil,
+	bin2gen(HD, RD).
+bin2gen(a(Et, HI, nil), a(Et, [RI])):- HI \= nil,
+	bin2gen(HI, RI).
+bin2gen(a(Et, HI, HD), a(Et, [RI, RD])):- 
+	HI \= nil, 
+	HD \= nil,
+	bin2gen(HI, RI),
+	bin2gen(HD, RD).
