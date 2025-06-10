@@ -1,55 +1,48 @@
 :- use_module(library(clpfd)).
 
-magic_square(Square) :-
-    % Verifica que Square sea una matriz cuadrada (N x N)
-    length(Square, N),
-    maplist(length_list(N), Square), % Todas las filas tienen longitud N
+magic_square(M):-
+    length(M, N),
+    maplist(length_list(N), M),
+    suma_filas(M, SumasFilas),
+    suma_columnas(M, SumasColumnas),
+    suma_diagonal_principal(M, SumaDP),
+    suma_diagonal_secundaria(M, SumaDS),
+    append(SumasFilas, SumasColumnas, SumasParciales),
+    append(SumasParciales, [SumaDP, SumaDS], TodasSumas),
+    todos_iguales(TodasSumas).
 
-    % Calcula suma de la primera fila
-    nth0(0, Square, FirstRow),
-    sum_list(FirstRow, MagicSum),
+length_list(N, L) :- length(L, N).
 
-    % Verifica sumas de filas
-    maplist(sum_row_equals(MagicSum), Square),
+suma_filas([], []).
+suma_filas([Fila|Resto], [Suma|Sumas]) :-
+    sum_list(Fila, Suma),
+    suma_filas(Resto, Sumas).
 
-    % Verifica sumas de columnas
-    transpose(Square, Transposed),
-    maplist(sum_row_equals(MagicSum), Transposed),
+suma_columnas(M, Sumas) :-
+    transpose(M, MT),
+    suma_filas(MT, Sumas).
 
-    % Verifica diagonales
-    diagonal_principal(Square, Diag1),
-    sum_list(Diag1, MagicSum),
-    diagonal_secundaria(Square, Diag2),
-    sum_list(Diag2, MagicSum).
+suma_diagonal_principal(M, Suma) :-
+    suma_diagonal_principal_aux(M, 0, Suma).
 
+suma_diagonal_principal_aux([], _, 0).
+suma_diagonal_principal_aux([Fila|Resto], P, Suma) :-
+    nth0(P, Fila, Elem),
+    P1 is P + 1,
+    suma_diagonal_principal_aux(Resto, P1, SumaResto),
+    Suma is Elem + SumaResto.
 
-% Verifica que una lista tenga longitud N
-length_list(N, List) :- length(List, N).
+suma_diagonal_secundaria(M, Suma) :-
+    length(M, N),
+    P is N - 1,
+    suma_diagonal_secundaria_aux(M, P, Suma).
 
-% Verifica que la suma de una fila sea igual a MagicSum
-sum_row_equals(MagicSum, Row) :- sum_list(Row, MagicSum).
+suma_diagonal_secundaria_aux([], _, 0).
+suma_diagonal_secundaria_aux([Fila|Resto], P, Suma) :-
+    nth0(P, Fila, Elem),
+    P1 is P - 1,
+    suma_diagonal_secundaria_aux(Resto, P1, SumaResto),
+    Suma is Elem + SumaResto.
 
-% Obtiene la diagonal principal (de arriba-izquierda a abajo-derecha)
-diagonal_principal([], []).
-diagonal_principal([Row|Rows], [Element|Diagonal]) :-
-    nth0(0, Row, Element),
-    maplist(remove_first, Rows, RowsWithoutFirst),
-    diagonal_principal(RowsWithoutFirst, Diagonal).
-
-remove_first([_|Tail], Tail).
-
-% Obtiene la diagonal secundaria (de arriba-derecha a abajo-izquierda)
-diagonal_secundaria(Square, Diagonal) :-
-    length(Square, N),
-    diagonal_secundaria_aux(Square, 0, N, Diagonal).
-
-diagonal_secundaria_aux([], _, _, []).
-diagonal_secundaria_aux([Row|Rows], Index, N, [Element|Diagonal]) :-
-    Pos is N - 1 - Index,
-    nth0(Pos, Row, Element),
-    NextIndex is Index + 1,
-    diagonal_secundaria_aux(Rows, NextIndex, N, Diagonal).
-
-lists_firsts_rests([], [], []).
-lists_firsts_rests([[F|Os]|Rest], [F|Fs], [Os|Oss]) :-
-    lists_firsts_rests(Rest, Fs, Oss).
+todos_iguales([]).
+todos_iguales([X|Xs]) :- maplist(=(X), Xs).
