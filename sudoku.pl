@@ -24,19 +24,19 @@ s1([
 
 */
 
-sudoku(Rows):-
-		length(Rows, 9),
-		maplist(same_length(Rows), Rows),		%Matriz 9x9
-		append(Rows, Vs), Vs ins 1..9,			%Con números del 1 al 9
-		maplist(all_distinct, Rows),			%Con números distintos por filas
-		transpose(Rows, Columns),				%Traspuesta de la matriz
-		maplist(all_distinct, Columns),			%Con números distintos por columnas
-		Rows = [As,Bs,Cs,Ds,Es,Fs,Gs,Hs,Is],
-		blocks(As,Bs,Cs),
-		blocks(Ds,Es,Fs),
-		blocks(Gs,Hs,Is).
+sudoku(Rows) :-
+        length(Rows, 9),
+        maplist(same_length(Rows), Rows),
+        append(Rows, Vs), Vs ins 1..9,
+        maplist(all_distinct, Rows),
+        transpose(Rows, Columns),
+        maplist(all_distinct, Columns),
+        Rows = [As,Bs,Cs,Ds,Es,Fs,Gs,Hs,Is],
+        blocks(As, Bs, Cs),
+        blocks(Ds, Es, Fs),
+        blocks(Gs, Hs, Is).
 
 blocks([], [], []).
-blocks([As,Bs,Cs|Ns1], [Ds,Es,Fs|Ns2], [Gs,Hs,Is|Ns3]):-
-        all_distinct([As,Bs,Cs,Ds,Es,Fs,Gs,Hs,Is]),
+blocks([N1,N2,N3|Ns1], [N4,N5,N6|Ns2], [N7,N8,N9|Ns3]) :-
+        all_distinct([N1,N2,N3,N4,N5,N6,N7,N8,N9]),
         blocks(Ns1, Ns2, Ns3).
